@@ -1,0 +1,133 @@
+@use '../../../styles/variables' as *;
+
+.notif-bell-wrap {
+  position: relative;
+}
+
+.notif-bell-btn {
+  position: relative;
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1.1rem;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  border-radius: $border-radius;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+}
+
+.notif-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: $danger;
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+}
+
+.notif-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: -70px;
+  width: 340px;
+  max-width: 90vw;
+  background: $soft-white;
+  border: 1px solid $border-hairline;
+  border-radius: $border-radius;
+  box-shadow: 0 8px 24px rgba(26, 26, 26, 0.14);
+  z-index: 1000;
+  overflow: hidden;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid $border-hairline;
+    font-weight: 600;
+    font-family: $font-family-display;
+    color: $ink;
+    font-size: 0.9rem;
+  }
+
+  &__list {
+    max-height: 340px;
+    overflow-y: auto;
+  }
+}
+
+.btn-link-small {
+  background: none;
+  border: none;
+  color: $purple;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.notif-empty {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  color: $muted;
+  font-size: 0.85rem;
+}
+
+.notif-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  border-bottom: 1px solid $border-hairline;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+
+  &:hover {
+    background: $purple-tint;
+  }
+
+  &.unread {
+    background: rgba($purple, 0.04);
+
+    .notif-item__title::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: $purple;
+      margin-right: 0.4rem;
+    }
+  }
+
+  &__title {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: $ink;
+  }
+
+  &__message {
+    font-size: 0.8rem;
+    color: $muted;
+    margin-top: 0.15rem;
+  }
+
+  &__time {
+    font-size: 0.7rem;
+    color: $muted;
+    font-family: $font-family-mono;
+    margin-top: 0.3rem;
+  }
+}

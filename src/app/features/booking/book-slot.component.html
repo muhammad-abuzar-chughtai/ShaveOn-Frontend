@@ -1,0 +1,138 @@
+<section class="section booking-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="eyebrow">Book an Appointment</span>
+      <h1 class="mt-2">Book Your Slot</h1>
+      <p class="text-muted-custom">Pick your services, choose a time, and you're set.</p>
+    </div>
+
+    <div class="row g-4">
+      <!-- ================= LEFT: Services + Date + Slots ================= -->
+      <div class="col-12 col-lg-8">
+        <!-- Step 1: Services -->
+        <div class="booking-card mb-4">
+          <div class="booking-card__title"><span class="step-num">1</span>Select Services</div>
+
+          @if (loadingServices()) {
+          <div class="text-center py-4">
+            <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading…</span></div>
+          </div>
+          } @else {
+          <div class="service-checklist">
+            @for (service of services(); track service.id) {
+            <label class="service-check-row" [class.checked]="selectedServiceIds().has(service.id)">
+              <input type="checkbox" [checked]="selectedServiceIds().has(service.id)"
+                (change)="toggleService(service.id)" />
+              <span class="service-check-row__name">{{ service.name }}</span>
+              <span class="service-check-row__meta text-muted-custom">
+                <i class="fa-regular fa-clock me-1"></i>{{ service.durationMinutes }} min
+              </span>
+              <span class="service-check-row__price data-mono">$ {{ service.price }}</span>
+            </label>
+            }
+          </div>
+          }
+        </div>
+
+        <!-- Step 2: Date -->
+        <div class="booking-card mb-4">
+          <div class="booking-card__title"><span class="step-num">2</span>Choose a Date</div>
+          <input type="date" class="form-control date-input" [value]="selectedDate()" [min]="minDate" [max]="maxDate()"
+            (change)="onDateChange($any($event.target).value)" />
+        </div>
+
+        <!-- Step 3: Time slot -->
+        <div class="booking-card">
+          <div class="booking-card__title"><span class="step-num">3</span>Choose a Time</div>
+
+          @if (totalDuration() === 0) {
+          <p class="text-muted-custom small mb-0">Select at least one service to see available times.</p>
+          } @else if (loadingSlots()) {
+          <div class="text-center py-4">
+            <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading…</span></div>
+          </div>
+          } @else if (!isShopOpen()) {
+          <p class="text-muted-custom small mb-0">
+            <i class="fa-solid fa-circle-exclamation me-1"></i>ShaveOn is closed on this date. Please pick another day.
+          </p>
+          } @else if (slots().length === 0) {
+          <p class="text-muted-custom small mb-0">No slots available for the selected services on this date.</p>
+          } @else {
+          <div class="slot-grid">
+            @for (slot of slots(); track slot.startTime) {
+            <button type="button" class="slot-btn" [class.selected]="selectedSlot() === slot.startTime"
+              [disabled]="!slot.isAvailable" (click)="selectSlot(slot)">
+              {{ formatTimeLabel(slot.startTime) }}
+            </button>
+            }
+          </div>
+          }
+        </div>
+      </div>
+
+      <!-- ================= RIGHT: Receipt Panel (signature element) ================= -->
+      <div class="col-12 col-lg-4">
+        <div class="receipt-panel booking-summary-sticky">
+          <div class="receipt-panel__header">
+            <i class="fa-solid fa-receipt me-2"></i>Booking Summary
+          </div>
+          <div class="receipt-panel__body">
+            @if (selectedServices().length === 0) {
+            <p class="text-muted-custom small mb-0">No services selected yet.</p>
+            } @else {
+            @for (service of selectedServices(); track service.id) {
+            <div class="receipt-panel__row">
+              <span class="receipt-panel__row-label">{{ service.name }}</span>
+              <span class="receipt-panel__row-value">$ {{ service.price }}</span>
+            </div>
+            }
+
+            <div class="receipt-panel__divider"></div>
+
+            <div class="receipt-panel__row">
+              <span class="receipt-panel__row-label">Total Duration</span>
+              <span class="receipt-panel__row-value">{{ totalDuration() }} min</span>
+            </div>
+
+            @if (selectedDate()) {
+            <div class="receipt-panel__row">
+              <span class="receipt-panel__row-label">Date</span>
+              <span class="receipt-panel__row-value">{{ selectedDate() }}</span>
+            </div>
+            }
+
+            @if (selectedSlot()) {
+            <div class="receipt-panel__row">
+              <span class="receipt-panel__row-label">Time</span>
+              <span class="receipt-panel__row-value">{{ formatTimeLabel(selectedSlot()!) }}</span>
+            </div>
+            }
+
+            <div class="receipt-panel__total">
+              <span>Total</span>
+              <span class="amount">$ {{ totalPrice() }}</span>
+            </div>
+
+            <div class="receipt-panel__deposit-note">
+              <i class="fa-solid fa-circle-info me-1"></i>
+              Pay $ {{ depositAmount() }} now to secure your slot ({{ shopSettings()?.depositPercentage ?? 10 }}%
+              deposit) - remaining balance payable at the shop.
+            </div>
+            }
+          </div>
+
+          <div class="p-3 pt-0">
+            <button type="button" class="btn btn-primary w-100 py-2 fw-semibold"
+              [disabled]="selectedServices().length === 0 || !selectedSlot() || submitting()"
+              (click)="confirmBooking()">
+              @if (submitting()) {
+              <span class="spinner-border spinner-border-sm me-2"></span>
+              }
+              Confirm Booking
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

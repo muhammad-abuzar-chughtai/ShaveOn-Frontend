@@ -1,0 +1,100 @@
+<div class="admin-page-header">
+  <div>
+    <h2>Services</h2>
+    <p>Manage what customers can book, along with duration and pricing.</p>
+  </div>
+  <button type="button" class="btn btn-primary btn-sm" (click)="openCreateForm()">
+    <i class="fa-solid fa-plus me-2"></i>New Service
+  </button>
+</div>
+
+@if (showForm()) {
+<div class="admin-form-card mb-4">
+  <h6 class="mb-3">{{ editingId() ? 'Edit Service' : 'New Service' }}</h6>
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="row g-3">
+      <div class="col-12 col-md-6">
+        <label class="form-label small fw-medium">Name</label>
+        <input type="text" class="form-control" formControlName="name" placeholder="e.g. Haircut" />
+      </div>
+      <div class="col-12 col-md-6">
+        <label class="form-label small fw-medium">Description (optional)</label>
+        <input type="text" class="form-control" formControlName="description" placeholder="Short description" />
+      </div>
+      <div class="col-12 col-md-3">
+        <label class="form-label small fw-medium">Duration (minutes)</label>
+        <input type="number" class="form-control" formControlName="durationMinutes" min="5" max="480" />
+      </div>
+      <div class="col-12 col-md-3">
+        <label class="form-label small fw-medium">Price (Rs.)</label>
+        <input type="number" class="form-control" formControlName="price" min="0" />
+      </div>
+      <div class="col-12 col-md-3 d-flex align-items-end">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="isActive" formControlName="isActive" />
+          <label class="form-check-label small" for="isActive">Active</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex gap-2 mt-4">
+      <button type="submit" class="btn btn-primary" [disabled]="saving()">
+        @if (saving()) {
+        <span class="spinner-border spinner-border-sm me-2"></span>
+        }
+        Save
+      </button>
+      <button type="button" class="btn btn-outline-secondary" (click)="cancelForm()">Cancel</button>
+    </div>
+  </form>
+</div>
+}
+
+@if (loading()) {
+<div class="text-center py-5">
+  <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading…</span></div>
+</div>
+} @else {
+<div class="admin-table-card">
+  @if (services().length === 0) {
+  <div class="admin-empty-state">No services yet. Create your first one above.</div>
+  } @else {
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Duration</th>
+        <th>Price</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (s of services(); track s.id) {
+      <tr>
+        <td>
+          {{ s.name }}
+          @if (s.description) {
+          <br /><small class="text-muted-custom">{{ s.description }}</small>
+          }
+        </td>
+        <td>{{ s.durationMinutes }} min</td>
+        <td class="data-mono">$ {{ s.price }}</td>
+        <td>
+          <span class="status-badge" [class]="s.isActive ? 'status-badge--confirmed' : 'status-badge--cancelled'">
+            {{ s.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </td>
+        <td class="text-end">
+          <button type="button" class="btn btn-sm btn-outline-secondary me-2" (click)="openEditForm(s)">Edit</button>
+          @if (s.isActive) {
+          <button type="button" class="btn btn-sm btn-outline-danger" (click)="deactivate(s)">Deactivate</button>
+          }
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+  }
+</div>
+}

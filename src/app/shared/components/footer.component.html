@@ -1,0 +1,45 @@
+<footer class="app-footer">
+  <div class="container">
+    <div class="row gy-4">
+      <div class="col-12 col-md-4">
+        <div class="footer-brand">
+          <i class="fa-solid fa-scissors me-2"></i>ShaveOn
+        </div>
+        <p class="text-muted-custom mb-0 mt-2">
+          {{ settings()?.shopName || 'ShaveOn' }} - precision grooming, booked in seconds.
+        </p>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <div class="footer-heading">Quick Links</div>
+        <ul class="list-unstyled footer-links">
+          <li><a routerLink="/">Home</a></li>
+          <li><a routerLink="/about">About</a></li>
+          <li><a routerLink="/contact">Contact</a></li>
+          <li><a routerLink="/privacy-policy">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <div class="footer-heading">Get in Touch</div>
+        @if (settings(); as s) {
+          <ul class="list-unstyled footer-links">
+            @if (s.address) {
+              <li><i class="fa-solid fa-location-dot me-2"></i>{{ s.address }}</li>
+            }
+            @if (s.contactPhone) {
+              <li><i class="fa-solid fa-phone me-2"></i><a [href]="'tel:' + s.contactPhone">{{ s.contactPhone }}</a></li>
+            }
+            @if (s.contactEmail) {
+              <li><i class="fa-solid fa-envelope me-2"></i><a [href]="'mailto:' + s.contactEmail">{{ s.contactEmail }}</a></li>
+            }
+          </ul>
+        }
+      </div>
+    </div>
+
+    <div class="hairline mt-4 pt-3 text-center">
+      <small class="text-muted-custom">&copy; {{ currentYear }} ShaveOn. All rights reserved.</small>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,201 @@
+// =============================================================
+// ShaveOn global styles - shared utility classes and the signature
+// booking-receipt component. Kept centralized so every feature
+// component (Bootstrap grid + minimal custom CSS) pulls from here
+// rather than re-declaring one-off styles.
+// =============================================================
+
+@use "variables" as *;
+
+// ----- Accessibility: always show a visible focus ring -----
+a,
+button,
+input,
+select,
+textarea,
+[tabindex] {
+  &:focus-visible {
+    outline: 2px solid $purple;
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+// ----- Layout helpers -----
+.section {
+  padding-block: clamp(3rem, 6vw, 5.5rem);
+}
+
+.section-surface {
+  background: $surface;
+}
+
+.eyebrow {
+  font-family: $font-family-mono;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $purple;
+  font-weight: 600;
+}
+
+.text-muted-custom {
+  color: $muted;
+}
+
+.hairline {
+  border-top: 1px solid $border-hairline;
+}
+
+// ----- Data / numeric display (times, prices, booking refs) -----
+.data-mono {
+  font-family: $font-family-mono;
+  font-variant-numeric: tabular-nums;
+}
+
+// ----- Signature element: the booking receipt panel -----
+// Behaves like a running POS receipt as the customer checks services -
+// itemized rows, mono-spaced prices, a total that updates live.
+.receipt-panel {
+  background: $soft-white;
+  border: 1px solid $border-hairline;
+  border-radius: $border-radius;
+  overflow: hidden;
+
+  &__header {
+    background: $purple;
+    color: $soft-white;
+    padding: 0.85rem 1.15rem;
+    font-family: $font-family-display;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
+  }
+
+  &__body {
+    padding: 1.15rem;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.4rem 0;
+    font-size: 0.9rem;
+
+    &-label {
+      color: $ink;
+    }
+
+    &-value {
+      font-family: $font-family-mono;
+      color: $ink;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  &__divider {
+    border-top: 1px dashed $border-hairline;
+    margin: 0.6rem 0;
+  }
+
+  &__total {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 0.5rem;
+    font-family: $font-family-display;
+    font-weight: 700;
+    font-size: 1.15rem;
+
+    .amount {
+      font-family: $font-family-mono;
+    }
+  }
+
+  &__deposit-note {
+    font-size: 0.78rem;
+    color: $muted;
+    margin-top: 0.35rem;
+  }
+}
+
+// ----- Status badges (booking status, admin dashboard) -----
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: $border-radius;
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: $font-family-mono;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+
+  &--confirmed {
+    background: rgba($success, 0.1);
+    color: $success;
+  }
+  &--cancelled {
+    background: rgba($danger, 0.1);
+    color: $danger;
+  }
+  &--completed {
+    background: rgba($purple, 0.1);
+    color: $purple;
+  }
+  &--noshow {
+    background: rgba($warning, 0.12);
+    color: $warning;
+  }
+}
+
+// ----- Time slot picker grid -----
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 0.5rem;
+}
+
+.slot-btn {
+  font-family: $font-family-mono;
+  font-size: 0.85rem;
+  padding: 0.5rem 0.4rem;
+  border: 1.5px solid $border-hairline;
+  border-radius: $border-radius;
+  background: $soft-white;
+  color: $ink;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+
+  &:hover:not(:disabled) {
+    border-color: $purple;
+    background: $purple-tint;
+  }
+
+  &.selected {
+    background: $purple;
+    border-color: $purple;
+    color: $soft-white;
+  }
+
+  &:disabled {
+    color: $muted;
+    background: $surface;
+    text-decoration: line-through;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}

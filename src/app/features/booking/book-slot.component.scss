@@ -1,0 +1,128 @@
+@use '../../../styles/variables' as *;
+
+.booking-section {
+  background: $surface;
+}
+
+.booking-card {
+  background: $soft-white;
+  border: 1px solid $border-hairline;
+  border-radius: $border-radius;
+  padding: 1.4rem 1.5rem;
+
+  &__title {
+    font-family: $font-family-display;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: $border-radius;
+  background: $purple;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-right: 0.65rem;
+  flex-shrink: 0;
+}
+
+.service-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.service-check-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border: 1.5px solid $border-hairline;
+  border-radius: $border-radius;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+
+  input[type='checkbox'] {
+    width: 18px;
+    height: 18px;
+    accent-color: $purple;
+    flex-shrink: 0;
+  }
+
+  &__name {
+    font-weight: 500;
+    flex: 1;
+  }
+
+  &__meta {
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  &__price {
+    font-weight: 600;
+    color: $purple;
+    white-space: nowrap;
+    min-width: 70px;
+    text-align: right;
+  }
+
+  &:hover {
+    border-color: $purple;
+  }
+
+  &.checked {
+    border-color: $purple;
+    background: $purple-tint;
+  }
+}
+
+.date-input {
+  max-width: 260px;
+}
+
+.booking-summary-sticky {
+  position: sticky;
+  top: 90px;
+}
+
+// Below lg, the receipt panel stacks as a normal block after the form sections -
+// sticky positioning here would be pointless (nothing scrolls past a trailing block)
+// and can behave inconsistently across mobile browsers, so it's disabled.
+@media (max-width: 991.98px) {
+  .booking-summary-sticky {
+    position: static;
+  }
+}
+
+// On very narrow phones (≤375px), name + duration + price can't comfortably share
+// one row - let the row wrap to two lines instead of squeezing or overflowing.
+@media (max-width: 400px) {
+  .service-check-row {
+    flex-wrap: wrap;
+
+    &__name {
+      flex-basis: 100%;
+      order: 1;
+    }
+
+    &__meta {
+      order: 2;
+    }
+
+    &__price {
+      order: 3;
+      margin-left: auto;
+      text-align: right;
+    }
+  }
+}

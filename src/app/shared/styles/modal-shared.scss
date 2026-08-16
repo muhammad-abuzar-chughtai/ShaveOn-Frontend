@@ -1,0 +1,58 @@
+@use '../../../styles/variables' as *;
+
+.modal-backdrop-custom {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 26, 26, 0.55);
+  z-index: 1500;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 3rem 1rem;
+  overflow-y: auto;
+}
+
+.modal-panel {
+  background: #fff;
+  border-radius: $border-radius;
+  width: 100%;
+  max-width: 640px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.1rem 1.4rem;
+    border-bottom: 1px solid $border-hairline;
+  }
+
+  &__body {
+    padding: 1.4rem;
+    overflow-y: auto;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+    padding: 1rem 1.4rem;
+    border-top: 1px solid $border-hairline;
+  }
+}
+
+.btn-close-modal {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: $muted;
+  cursor: pointer;
+}
+
+.invalid-feedback-custom {
+  color: $danger;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}

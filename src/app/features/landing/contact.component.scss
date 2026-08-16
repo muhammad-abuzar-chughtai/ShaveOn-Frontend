@@ -1,0 +1,14 @@
+@use '../../../styles/variables' as *;
+
+.contact-card {
+  background: $soft-white;
+  border: 1px solid $border-hairline;
+  border-radius: $border-radius;
+  padding: 2rem 1.5rem;
+  height: 100%;
+}
+
+.contact-icon {
+  font-size: 1.75rem;
+  color: $purple;
+}

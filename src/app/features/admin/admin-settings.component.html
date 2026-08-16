@@ -1,0 +1,63 @@
+<div class="admin-page-header">
+  <div>
+    <h2>Shop Settings</h2>
+    <p>Shown publicly on the About/Contact pages, and used for booking rules.</p>
+  </div>
+</div>
+
+@if (loading()) {
+  <div class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading…</span></div>
+  </div>
+} @else {
+  <div class="admin-form-card" style="max-width: 640px;">
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <div class="row g-3">
+        <div class="col-12 col-md-6">
+          <label class="form-label small fw-medium">Shop Name</label>
+          <input type="text" class="form-control" formControlName="shopName" />
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="form-label small fw-medium">Contact Phone</label>
+          <input type="tel" class="form-control" formControlName="contactPhone" />
+        </div>
+        <div class="col-12">
+          <label class="form-label small fw-medium">Address</label>
+          <input type="text" class="form-control" formControlName="address" />
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="form-label small fw-medium">Contact Email</label>
+          <input type="email" class="form-control" formControlName="contactEmail" />
+        </div>
+      </div>
+
+      <hr class="my-4" />
+      <h6 class="mb-3">Booking Rules</h6>
+
+      <div class="row g-3">
+        <div class="col-12 col-md-4">
+          <label class="form-label small fw-medium">Deposit %</label>
+          <input type="number" class="form-control" formControlName="depositPercentage" min="0" max="100" />
+          <small class="text-muted-custom">Shown as "pay now" on the booking form.</small>
+        </div>
+        <div class="col-12 col-md-4">
+          <label class="form-label small fw-medium">Booking Window (days)</label>
+          <input type="number" class="form-control" formControlName="bookingWindowDays" min="1" max="90" />
+          <small class="text-muted-custom">How far ahead customers can book.</small>
+        </div>
+        <div class="col-12 col-md-4">
+          <label class="form-label small fw-medium">Minimum Lead Time (minutes)</label>
+          <input type="number" class="form-control" formControlName="minLeadTimeMinutes" min="0" />
+          <small class="text-muted-custom">Blocks last-minute bookings.</small>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary mt-4" [disabled]="saving()">
+        @if (saving()) {
+          <span class="spinner-border spinner-border-sm me-2"></span>
+        }
+        Save Settings
+      </button>
+    </form>
+  </div>
+}

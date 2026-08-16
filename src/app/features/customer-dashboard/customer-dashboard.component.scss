@@ -1,0 +1,95 @@
+@use '../../../styles/variables' as *;
+
+.dashboard-section {
+  min-height: calc(100vh - 300px);
+}
+
+.reminder-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: $purple-tint;
+  border: 1px solid rgba($purple, 0.25);
+  border-radius: $border-radius;
+  padding: 1.1rem 1.4rem;
+
+  &__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: $border-radius;
+    background: $purple;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  &__title {
+    font-weight: 600;
+    font-family: $font-family-display;
+    color: $ink;
+    font-size: 0.95rem;
+  }
+
+  &__detail {
+    color: $muted;
+    font-size: 0.88rem;
+    margin-top: 0.15rem;
+  }
+}
+
+.booking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.booking-row {
+  display: grid;
+  grid-template-columns: 110px 1fr auto auto auto;
+  align-items: center;
+  gap: 1rem;
+  background: $soft-white;
+  border: 1px solid $border-hairline;
+  border-radius: $border-radius;
+  padding: 0.85rem 1.1rem;
+
+  &--past {
+    opacity: 0.85;
+  }
+
+  &__date-day {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: $ink;
+  }
+
+  &__date-time {
+    font-size: 0.78rem;
+    color: $muted;
+  }
+
+  &__services {
+    font-size: 0.88rem;
+    color: $ink;
+  }
+
+  &__price {
+    font-weight: 600;
+    color: $purple;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .booking-row {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+
+    &__price {
+      order: 1;
+    }
+  }
+}

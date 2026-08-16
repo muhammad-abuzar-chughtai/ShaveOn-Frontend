@@ -1,0 +1,83 @@
+<div class="admin-shell">
+  <!-- Backdrop shown only when the off-canvas sidebar is open on mobile/tablet -->
+  @if (isSidebarOpen()) {
+    <div class="admin-sidebar-backdrop" (click)="closeSidebar()"></div>
+  }
+
+  <aside class="admin-sidebar" [class.admin-sidebar--open]="isSidebarOpen()">
+    <div class="admin-sidebar__brand">
+      <i class="fa-solid fa-scissors me-2"></i>ShaveOn
+      <span class="admin-badge">Admin</span>
+      <button type="button" class="admin-sidebar__close-btn" (click)="closeSidebar()" aria-label="Close menu">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <nav class="admin-nav">
+      <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="admin-nav__link">
+        <i class="fa-solid fa-gauge"></i><span>Dashboard</span>
+      </a>
+      <a routerLink="/admin/bookings" routerLinkActive="active" class="admin-nav__link">
+        <i class="fa-solid fa-calendar-check"></i><span>Bookings</span>
+      </a>
+      <a routerLink="/admin/schedule" routerLinkActive="active" class="admin-nav__link">
+        <i class="fa-solid fa-clock"></i><span>Schedule</span>
+      </a>
+      <a routerLink="/admin/services" routerLinkActive="active" class="admin-nav__link">
+        <i class="fa-solid fa-list-check"></i><span>Services</span>
+      </a>
+      <a routerLink="/admin/barbers" routerLinkActive="active" class="admin-nav__link">
+        <i class="fa-solid fa-user-tie"></i><span>Barbers</span>
+      </a>
+      <a routerLink="/admin/settings" routerLinkActive="active" class="admin-nav__link">
+        <i class="fa-solid fa-gear"></i><span>Shop Settings</span>
+      </a>
+    </nav>
+
+    <button type="button" class="admin-sidebar__site-link" (click)="goHome()">
+      <i class="fa-solid fa-arrow-up-right-from-square"></i><span>View Site</span>
+    </button>
+  </aside>
+
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div class="admin-topbar__left">
+        <button type="button" class="admin-hamburger" (click)="toggleSidebar()" aria-label="Open menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="admin-topbar__title">Admin Panel</div>
+      </div>
+      <div class="admin-topbar__actions">
+        <app-notification-bell></app-notification-bell>
+        <div class="admin-user-menu">
+          <button type="button" class="admin-user" (click)="toggleUserMenu()">
+            <i class="fa-solid fa-circle-user"></i>
+            <span class="admin-user__name">{{ auth.fullName() }}</span>
+            <i class="fa-solid fa-chevron-down admin-user__caret"></i>
+          </button>
+          @if (showUserMenu()) {
+            <div class="admin-user-dropdown">
+              <button type="button" class="admin-user-dropdown__item" (click)="openChangePassword()">
+                <i class="fa-solid fa-key me-2"></i>Change Password
+              </button>
+              <button type="button" class="admin-user-dropdown__item admin-user-dropdown__item--mobile-only" (click)="logout()">
+                <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Log out
+              </button>
+            </div>
+          }
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-secondary admin-logout-btn" (click)="logout()">Log out</button>
+      </div>
+    </header>
+
+    <main class="admin-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
+
+@if (showChangePassword()) {
+  <app-change-password-modal (closed)="showChangePassword.set(false)"></app-change-password-modal>
+}
+
+<app-toast-container></app-toast-container>

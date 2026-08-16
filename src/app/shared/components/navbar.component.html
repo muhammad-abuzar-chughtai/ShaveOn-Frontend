@@ -1,0 +1,49 @@
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top app-navbar">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/" (click)="closeMenu()">
+      <i class="fa-solid fa-scissors me-2"></i>ShaveOn
+    </a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="isMenuOpen()"
+      aria-controls="mainNav"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" [class.show]="isMenuOpen()" id="mainNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/about" routerLinkActive="active" (click)="closeMenu()">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/contact" routerLinkActive="active" (click)="closeMenu()">Contact</a>
+        </li>
+        @if (auth.isAuthenticated() && !auth.isAdmin()) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/dashboard" routerLinkActive="active" (click)="closeMenu()">My Bookings</a>
+          </li>
+        }
+      </ul>
+
+      <div class="navbar-actions">
+        @if (auth.isAuthenticated()) {
+          <button class="btn btn-outline-light btn-sm" (click)="goToDashboard()">
+            <i class="fa-solid fa-user me-1"></i>{{ auth.fullName() }}
+          </button>
+          <button class="btn btn-light btn-sm" (click)="logout()">Log out</button>
+        } @else {
+          <a class="btn btn-outline-light btn-sm" routerLink="/login" (click)="closeMenu()">Log in</a>
+          <a class="btn btn-light btn-sm fw-semibold" routerLink="/book" (click)="closeMenu()">Book Your Slot</a>
+        }
+      </div>
+    </div>
+  </div>
+</nav>

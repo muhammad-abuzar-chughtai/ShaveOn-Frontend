@@ -1,0 +1,288 @@
+@use '../../styles/variables' as *;
+
+.admin-shell {
+  display: flex;
+  min-height: 100vh;
+  background: $surface;
+}
+
+// ===================== Sidebar =====================
+.admin-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: $ink;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 1200;
+
+  &__brand {
+    font-family: $font-family-display;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 0 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+  }
+
+  &__close-btn {
+    display: none;
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+    cursor: pointer;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+
+  &__site-link {
+    margin-top: auto;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 0.82rem;
+    text-align: left;
+    padding: 0.85rem 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+
+    i { margin-right: 0.5rem; }
+    &:hover { color: #ffffff; }
+  }
+}
+
+.admin-badge {
+  font-family: $font-family-mono;
+  font-size: 0.62rem;
+  background: $purple;
+  color: #fff;
+  padding: 0.15rem 0.4rem;
+  border-radius: $border-radius;
+  margin-left: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0 0.6rem;
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.65rem 0.8rem;
+    border-radius: $border-radius;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.88rem;
+    font-weight: 500;
+
+    i { width: 18px; text-align: center; }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+
+    &.active {
+      background: $purple;
+      color: #fff;
+      font-weight: 600;
+    }
+  }
+}
+
+.admin-sidebar-backdrop {
+  display: none;
+}
+
+// ===================== Main column =====================
+.admin-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-bottom: 1px solid $border-hairline;
+  padding: 0.85rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  gap: 0.75rem;
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-width: 0;
+  }
+
+  &__title {
+    font-family: $font-family-display;
+    font-weight: 600;
+    color: $ink;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    color: $ink;
+    flex-shrink: 0;
+  }
+}
+
+.admin-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: $ink;
+  padding: 0.3rem 0.5rem;
+  border-radius: $border-radius;
+  cursor: pointer;
+
+  &:hover { background: $purple-tint; }
+}
+
+.admin-user-menu { position: relative; }
+
+.admin-user {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem 0.4rem;
+  border-radius: $border-radius;
+  color: $ink;
+
+  &:hover { background: $purple-tint; }
+
+  i:first-child { font-size: 1.3rem; color: $muted; }
+  &__caret { font-size: 0.65rem; color: $muted; }
+}
+
+.admin-user-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 180px;
+  background: $soft-white;
+  border: 1px solid $border-hairline;
+  border-radius: $border-radius;
+  box-shadow: 0 8px 24px rgba(26, 26, 26, 0.14);
+  z-index: 1000;
+  overflow: hidden;
+
+  &__item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 0.65rem 1rem;
+    font-size: 0.85rem;
+    color: $ink;
+    cursor: pointer;
+
+    &:hover { background: $purple-tint; }
+
+    &--mobile-only { display: none; }
+  }
+}
+
+.admin-content {
+  flex: 1;
+  padding: 1.75rem;
+  min-width: 0;
+}
+
+// ===================== Responsive: tablet & mobile =====================
+// Sidebar becomes a fixed off-canvas drawer below the lg breakpoint - hidden by
+// default, slides in when the hamburger is tapped, with a tap-to-close backdrop.
+@media (max-width: 991.98px) {
+  .admin-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100dvh;
+    width: 260px;
+    max-width: 80vw;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
+
+    &--open {
+      transform: translateX(0);
+    }
+
+    &__close-btn {
+      display: block;
+    }
+  }
+
+  .admin-sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1100;
+  }
+
+  .admin-hamburger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .admin-topbar {
+    padding: 0.7rem 1rem;
+  }
+
+  .admin-user__name {
+    display: none;
+  }
+
+  // On mobile, fold "Log out" into the user dropdown instead of a separate
+  // always-visible button - there isn't room for both.
+  .admin-logout-btn {
+    display: none;
+  }
+
+  .admin-user-dropdown__item--mobile-only {
+    display: block;
+  }
+
+  .admin-content {
+    padding: 1.1rem 0.9rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .admin-sidebar__close-btn {
+    display: none;
+  }
+}

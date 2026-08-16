@@ -1,0 +1,95 @@
+<section class="section dashboard-section">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+      <div>
+        <span class="eyebrow">My Account</span>
+        <h1 class="mt-1 mb-0">Hi, {{ auth.fullName() }}</h1>
+      </div>
+      <div class="d-flex gap-2">
+        <button type="button" class="btn btn-outline-secondary" (click)="showChangePassword.set(true)">
+          <i class="fa-solid fa-key me-2"></i>Change Password
+        </button>
+        <a routerLink="/book" class="btn btn-primary px-4">
+          <i class="fa-solid fa-plus me-2"></i>Book New Slot
+        </a>
+      </div>
+    </div>
+
+    @if (loading()) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading…</span></div>
+    </div>
+    } @else {
+    <!-- Reminder card for the very next booking -->
+    @if (nextBooking(); as next) {
+    <div class="reminder-card mb-4">
+      <div class="reminder-card__icon"><i class="fa-solid fa-bell"></i></div>
+      <div>
+        <div class="reminder-card__title">Your next appointment</div>
+        <div class="reminder-card__detail">
+          {{ formatDateLabel(next.bookingDate) }} at {{ formatTimeLabel(next.startTime) }} &middot;
+          {{ next.totalDurationMinutes }} min &middot; $ {{ next.totalPrice }}
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- Upcoming bookings -->
+    <h5 class="mb-3">Upcoming Bookings</h5>
+    @if (upcoming().length === 0) {
+    <p class="text-muted-custom small mb-4">No upcoming bookings. Ready for your next visit?</p>
+    } @else {
+    <div class="booking-list mb-5">
+      @for (booking of upcoming(); track booking.id) {
+      <div class="booking-row">
+        <div class="booking-row__date">
+          <div class="booking-row__date-day">{{ formatDateLabel(booking.bookingDate) }}</div>
+          <div class="booking-row__date-time data-mono">{{ formatTimeLabel(booking.startTime) }}</div>
+        </div>
+        <div class="booking-row__services">
+          {{ booking.services.length }} service{{ booking.services.length !== 1 ? 's' : '' }}:
+          {{ booking.services.map(s => s.serviceName).join(', ') }}
+        </div>
+        <div class="booking-row__price data-mono">$ {{ booking.totalPrice }}</div>
+        <span class="status-badge" [class]="statusBadgeClass(booking.status)">{{ statusLabel(booking.status) }}</span>
+        <button type="button" class="btn btn-sm btn-outline-danger" [disabled]="cancellingId() === booking.id"
+          (click)="cancelBooking(booking)">
+          @if (cancellingId() === booking.id) {
+          <span class="spinner-border spinner-border-sm"></span>
+          } @else {
+          Cancel
+          }
+        </button>
+      </div>
+      }
+    </div>
+    }
+
+    <!-- History -->
+    <h5 class="mb-3">History</h5>
+    @if (history().length === 0) {
+    <p class="text-muted-custom small">No past bookings yet.</p>
+    } @else {
+    <div class="booking-list">
+      @for (booking of history(); track booking.id) {
+      <div class="booking-row booking-row--past">
+        <div class="booking-row__date">
+          <div class="booking-row__date-day">{{ formatDateLabel(booking.bookingDate) }}</div>
+          <div class="booking-row__date-time data-mono">{{ formatTimeLabel(booking.startTime) }}</div>
+        </div>
+        <div class="booking-row__services">
+          {{ booking.services.map(s => s.serviceName).join(', ') }}
+        </div>
+        <div class="booking-row__price data-mono">$ {{ booking.totalPrice }}</div>
+        <span class="status-badge" [class]="statusBadgeClass(booking.status)">{{ statusLabel(booking.status) }}</span>
+      </div>
+      }
+    </div>
+    }
+    }
+  </div>
+</section>
+
+@if (showChangePassword()) {
+<app-change-password-modal (closed)="showChangePassword.set(false)"></app-change-password-modal>
+}

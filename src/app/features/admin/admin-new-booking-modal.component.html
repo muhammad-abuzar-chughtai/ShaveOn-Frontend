@@ -1,0 +1,90 @@
+<div class="modal-backdrop-custom" (click)="close()">
+  <div class="modal-panel" (click)="$event.stopPropagation()">
+    <div class="modal-panel__header">
+      <h5 class="mb-0">New Booking (Walk-in / Phone)</h5>
+      <button type="button" class="btn-close-modal" (click)="close()" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="modal-panel__body">
+      <form [formGroup]="customerForm">
+        <div class="row g-3 mb-3">
+          <div class="col-12 col-md-4">
+            <label class="form-label small fw-medium">Customer Name</label>
+            <input type="text" class="form-control" formControlName="customerName" placeholder="Full name" />
+          </div>
+          <div class="col-12 col-md-4">
+            <label class="form-label small fw-medium">Phone</label>
+            <input type="tel" class="form-control" formControlName="customerPhone" placeholder="03xx-xxxxxxx" />
+          </div>
+          <div class="col-12 col-md-4">
+            <label class="form-label small fw-medium">Email (optional)</label>
+            <input type="email" class="form-control" formControlName="customerEmail" placeholder="optional" />
+          </div>
+        </div>
+      </form>
+
+      <label class="form-label small fw-medium">Services</label>
+      <div class="service-checklist mb-3">
+        @for (service of services(); track service.id) {
+        <label class="service-check-row" [class.checked]="selectedServiceIds().has(service.id)">
+          <input type="checkbox" [checked]="selectedServiceIds().has(service.id)"
+            (change)="toggleService(service.id)" />
+          <span class="flex-grow-1">{{ service.name }}</span>
+          <span class="text-muted-custom small me-2">{{ service.durationMinutes }} min</span>
+          <span class="data-mono fw-semibold">$ {{ service.price }}</span>
+        </label>
+        }
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-12 col-md-6">
+          <label class="form-label small fw-medium">Date</label>
+          <input type="date" class="form-control" [value]="selectedDate()" [min]="minDate"
+            (change)="onDateChange($any($event.target).value)" />
+        </div>
+      </div>
+
+      @if (totalDuration() > 0) {
+      <label class="form-label small fw-medium">Time Slot</label>
+      @if (loadingSlots()) {
+      <div class="text-center py-3">
+        <div class="spinner-border spinner-border-sm text-primary"></div>
+      </div>
+      } @else if (!isShopOpen()) {
+      <p class="text-muted-custom small">Shop is closed on this date.</p>
+      } @else if (slots().length === 0) {
+      <p class="text-muted-custom small">No slots available.</p>
+      } @else {
+      <div class="slot-grid mb-2">
+        @for (slot of slots(); track slot.startTime) {
+        <button type="button" class="slot-btn" [class.selected]="selectedSlot() === slot.startTime"
+          [disabled]="!slot.isAvailable" (click)="selectSlot(slot)">
+          {{ formatTimeLabel(slot.startTime) }}
+        </button>
+        }
+      </div>
+      }
+      }
+
+      @if (selectedServices().length > 0) {
+      <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+        <span class="text-muted-custom small">Total ({{ totalDuration() }} min)</span>
+        <span class="data-mono fw-bold fs-5">$ {{ totalPrice() }}</span>
+      </div>
+      }
+    </div>
+
+    <div class="modal-panel__footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="close()">Cancel</button>
+      <button type="button" class="btn btn-primary"
+        [disabled]="submitting() || selectedServices().length === 0 || !selectedSlot()" (click)="submit()">
+        @if (submitting()) {
+        <span class="spinner-border spinner-border-sm me-2"></span>
+        }
+        Create Booking
+      </button>
+    </div>
+  </div>
+</div>

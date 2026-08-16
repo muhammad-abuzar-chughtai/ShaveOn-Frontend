@@ -1,0 +1,32 @@
+<div class="notif-bell-wrap">
+  <button type="button" class="notif-bell-btn" (click)="toggle()" aria-label="Notifications">
+    <i class="fa-solid fa-bell"></i>
+    @if (unreadCount() > 0) {
+      <span class="notif-badge">{{ unreadCount() > 9 ? '9+' : unreadCount() }}</span>
+    }
+  </button>
+
+  @if (isOpen()) {
+    <div class="notif-dropdown">
+      <div class="notif-dropdown__header">
+        <span>Notifications</span>
+        @if (unreadCount() > 0) {
+          <button type="button" class="btn-link-small" (click)="markAllRead()">Mark all read</button>
+        }
+      </div>
+
+      <div class="notif-dropdown__list">
+        @if (notifications().length === 0) {
+          <div class="notif-empty">No notifications yet.</div>
+        }
+        @for (n of notifications(); track n.id) {
+          <button type="button" class="notif-item" [class.unread]="!n.isRead" (click)="markRead(n)">
+            <div class="notif-item__title">{{ n.title }}</div>
+            <div class="notif-item__message">{{ n.message }}</div>
+            <div class="notif-item__time">{{ n.createdAt | date: 'MMM d, h:mm a' }}</div>
+          </button>
+        }
+      </div>
+    </div>
+  }
+</div>

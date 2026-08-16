@@ -1,0 +1,75 @@
+<div class="admin-page-header">
+  <div>
+    <h2>Dashboard</h2>
+    <p>A quick look at today's business.</p>
+  </div>
+  <a routerLink="/admin/bookings" class="btn btn-primary btn-sm">View All Bookings</a>
+</div>
+
+@if (loading()) {
+<div class="text-center py-5">
+  <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading…</span></div>
+</div>
+} @else if (data(); as d) {
+<div class="row g-3 mb-4">
+  <div class="col-12 col-sm-6 col-lg-3">
+    <div class="stat-card">
+      <div class="stat-card__label"><i class="fa-solid fa-calendar-day stat-card__icon me-1"></i>Today's Bookings</div>
+      <div class="stat-card__value">{{ d.todayBookingsCount }}</div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-lg-3">
+    <div class="stat-card">
+      <div class="stat-card__label"><i class="fa-solid fa-calendar-week stat-card__icon me-1"></i>Upcoming</div>
+      <div class="stat-card__value">{{ d.upcomingBookingsCount }}</div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-lg-3">
+    <div class="stat-card">
+      <div class="stat-card__label"><i class="fa-solid fa-bell stat-card__icon me-1"></i>Unread Notifications</div>
+      <div class="stat-card__value">{{ d.unreadNotificationsCount }}</div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-lg-3">
+    <div class="stat-card">
+      <div class="stat-card__label"><i class="fa-solid fa-sack-dollar stat-card__icon me-1"></i>Today's Revenue</div>
+      <div class="stat-card__value">$ {{ d.todayRevenue }}</div>
+    </div>
+  </div>
+</div>
+
+<h5 class="mb-3">Today's Schedule</h5>
+<div class="admin-table-card">
+  @if (d.todayBookings.length === 0) {
+  <div class="admin-empty-state">No bookings scheduled for today.</div>
+  } @else {
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Customer</th>
+        <th>Services</th>
+        <th>Duration</th>
+        <th>Total</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (b of d.todayBookings; track b.id) {
+      <tr>
+        <td class="data-mono">{{ formatTimeLabel(b.startTime) }}</td>
+        <td>
+          {{ b.customerName }}<br />
+          <small class="text-muted-custom">{{ b.customerPhone }}</small>
+        </td>
+        <td>{{ b.services.map(s => s.serviceName).join(', ') }}</td>
+        <td>{{ b.totalDurationMinutes }} min</td>
+        <td class="data-mono">$ {{ b.totalPrice }}</td>
+        <td><span class="status-badge status-badge--confirmed">{{ BookingStatus[b.status] }}</span></td>
+      </tr>
+      }
+    </tbody>
+  </table>
+  }
+</div>
+}

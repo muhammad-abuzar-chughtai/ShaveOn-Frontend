@@ -1,0 +1,42 @@
+@use '../../../styles/variables' as *;
+
+// Modal shell (backdrop, panel, header/body/footer, close button) lives in
+// shared/styles/modal-shared.scss - this file only holds what's unique to this modal.
+
+.service-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.service-check-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.7rem;
+  border: 1.5px solid $border-hairline;
+  border-radius: $border-radius;
+  cursor: pointer;
+  font-size: 0.88rem;
+
+  input {
+    accent-color: $purple;
+  }
+
+  &.checked {
+    border-color: $purple;
+    background: $purple-tint;
+  }
+}
+
+@media (max-width: 400px) {
+  .service-check-row {
+    flex-wrap: wrap;
+
+    span:first-of-type {
+      flex-basis: 100%;
+    }
+  }
+}

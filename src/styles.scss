@@ -1,0 +1,42 @@
+// =============================================================
+// ShaveOn - Global stylesheet entry point
+// =============================================================
+
+// ----- Design tokens + global styles (Sass requires all @use before any other rule) -----
+@use "styles/variables" as *;
+@use "styles/global";
+
+// ----- Fonts -----
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap");
+
+// ----- Bootstrap (themed via the overrides above) -----
+@import "bootstrap/scss/bootstrap";
+
+// ----- Font Awesome -----
+@import "@fortawesome/fontawesome-free/css/all.min.css";
+
+// ----- Base element styles -----
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: $font-family-body;
+  color: $ink;
+  background: $soft-white;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-family-display;
+}
+
+// Consistent, moderate link styling - Bootstrap's $link-color already maps to $purple
+a {
+  text-decoration: none;
+}

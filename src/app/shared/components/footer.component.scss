@@ -1,0 +1,40 @@
+@use '../../../styles/variables' as *;
+
+.app-footer {
+  background: $surface;
+  border-top: 1px solid $border-hairline;
+  padding-block: 3rem 1.5rem;
+  font-size: 0.9rem;
+}
+
+.footer-brand {
+  font-family: $font-family-display;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: $purple;
+}
+
+.footer-heading {
+  font-family: $font-family-display;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+  color: $ink;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  li {
+    color: $muted;
+  }
+
+  a {
+    color: $muted;
+    &:hover {
+      color: $purple;
+    }
+  }
+}

@@ -1,0 +1,181 @@
+<div class="admin-page-header">
+  <div>
+    <h2>Schedule</h2>
+    <p>Control when customers can book - toggle days off, set hours, or add a one-time exception.</p>
+  </div>
+</div>
+
+@if (loading()) {
+  <div class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading…</span></div>
+  </div>
+} @else {
+  <!-- ===================== Weekly Working Hours ===================== -->
+  <h5 class="mb-1">Weekly Hours</h5>
+  <p class="text-muted-custom small mb-3">These rules repeat every week. Switch a day off entirely, or set a daily break window (e.g. lunch).</p>
+
+  <div class="admin-table-card mb-5">
+    <table class="admin-table schedule-table">
+      <thead>
+        <tr>
+          <th>Day</th>
+          <th>Open</th>
+          <th>Opening Time</th>
+          <th>Closing Time</th>
+          <th>Break Start</th>
+          <th>Break End</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (day of workingHours(); track day.day) {
+          <tr [class.day-closed]="!day.isOpen">
+            <td class="fw-medium">{{ weekDayLabels[day.day] }}</td>
+            <td>
+              <div class="form-check form-switch">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  role="switch"
+                  [checked]="day.isOpen"
+                  [disabled]="savingDay() === day.day"
+                  (change)="toggleDayOpen(day)"
+                />
+              </div>
+            </td>
+            <td>
+              <input
+                type="time"
+                class="form-control form-control-sm"
+                [value]="day.openTime.slice(0,5)"
+                [disabled]="!day.isOpen || savingDay() === day.day"
+                (change)="onTimeChange(day, 'openTime', $any($event.target).value + ':00')"
+              />
+            </td>
+            <td>
+              <input
+                type="time"
+                class="form-control form-control-sm"
+                [value]="day.closeTime.slice(0,5)"
+                [disabled]="!day.isOpen || savingDay() === day.day"
+                (change)="onTimeChange(day, 'closeTime', $any($event.target).value + ':00')"
+              />
+            </td>
+            <td>
+              <input
+                type="time"
+                class="form-control form-control-sm"
+                [value]="day.breakStart ? day.breakStart.slice(0,5) : ''"
+                [disabled]="!day.isOpen || savingDay() === day.day"
+                (change)="onTimeChange(day, 'breakStart', $any($event.target).value ? $any($event.target).value + ':00' : '')"
+              />
+            </td>
+            <td>
+              <input
+                type="time"
+                class="form-control form-control-sm"
+                [value]="day.breakEnd ? day.breakEnd.slice(0,5) : ''"
+                [disabled]="!day.isOpen || savingDay() === day.day"
+                (change)="onTimeChange(day, 'breakEnd', $any($event.target).value ? $any($event.target).value + ':00' : '')"
+              />
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===================== One-off Overrides ===================== -->
+  <div class="d-flex justify-content-between align-items-center mb-1">
+    <h5 class="mb-0">Date-Specific Exceptions</h5>
+    <button type="button" class="btn btn-primary btn-sm" (click)="openOverrideForm()">
+      <i class="fa-solid fa-plus me-2"></i>Add Exception
+    </button>
+  </div>
+  <p class="text-muted-custom small mb-3">
+    Close a single date entirely (e.g. a holiday), or block part of a day (e.g. closed 2-6pm for a private event).
+  </p>
+
+  @if (showOverrideForm()) {
+    <div class="admin-form-card mb-4">
+      <form [formGroup]="overrideForm" (ngSubmit)="saveOverride()">
+        <div class="row g-3">
+          <div class="col-12 col-md-4">
+            <label class="form-label small fw-medium">Date</label>
+            <input type="date" class="form-control" formControlName="date" [min]="minDate" />
+          </div>
+          <div class="col-12 col-md-4 d-flex align-items-end">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="fullDay" formControlName="isFullDayClosed" />
+              <label class="form-check-label small" for="fullDay">Close entire day</label>
+            </div>
+          </div>
+        </div>
+
+        @if (!overrideForm.controls.isFullDayClosed.value) {
+          <div class="row g-3 mt-1">
+            <div class="col-12 col-md-4">
+              <label class="form-label small fw-medium">Closed From</label>
+              <input type="time" class="form-control" formControlName="closedStart" />
+            </div>
+            <div class="col-12 col-md-4">
+              <label class="form-label small fw-medium">Closed Until</label>
+              <input type="time" class="form-control" formControlName="closedEnd" />
+            </div>
+          </div>
+        }
+
+        <div class="row g-3 mt-1">
+          <div class="col-12 col-md-8">
+            <label class="form-label small fw-medium">Reason (optional)</label>
+            <input type="text" class="form-control" formControlName="reason" placeholder="e.g. Public holiday" />
+          </div>
+        </div>
+
+        <div class="d-flex gap-2 mt-4">
+          <button type="submit" class="btn btn-primary" [disabled]="savingOverride()">
+            @if (savingOverride()) {
+              <span class="spinner-border spinner-border-sm me-2"></span>
+            }
+            Save
+          </button>
+          <button type="button" class="btn btn-outline-secondary" (click)="showOverrideForm.set(false)">Cancel</button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <div class="admin-table-card">
+    @if (overrides().length === 0) {
+      <div class="admin-empty-state">No upcoming exceptions.</div>
+    } @else {
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Reason</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (o of overrides(); track o.id) {
+            <tr>
+              <td>{{ formatDateLabel(o.date) }}</td>
+              <td>
+                @if (o.isFullDayClosed) {
+                  <span class="status-badge status-badge--cancelled">Closed All Day</span>
+                } @else {
+                  <span class="status-badge status-badge--noshow">{{ o.closedStart?.slice(0,5) }} - {{ o.closedEnd?.slice(0,5) }}</span>
+                }
+              </td>
+              <td>{{ o.reason || '-' }}</td>
+              <td class="text-end">
+                <button type="button" class="btn btn-sm btn-outline-danger" (click)="deleteOverride(o)">Remove</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+}

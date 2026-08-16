@@ -1,0 +1,50 @@
+<div class="container">
+  <div class="auth-card">
+    <div class="auth-icon"><i class="fa-solid fa-scissors"></i></div>
+    <h2 class="mb-1">Welcome back</h2>
+    <p class="text-muted-custom small mb-4">Log in to book a slot or manage your appointments.</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="mb-3">
+        <label class="form-label" for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          class="form-control"
+          formControlName="email"
+          [class.is-invalid]="form.controls.email.invalid && form.controls.email.touched"
+          placeholder="you@example.com"
+        />
+        @if (form.controls.email.invalid && form.controls.email.touched) {
+          <div class="invalid-feedback-custom">Enter a valid email address.</div>
+        }
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label" for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          class="form-control"
+          formControlName="password"
+          [class.is-invalid]="form.controls.password.invalid && form.controls.password.touched"
+          placeholder="••••••••"
+        />
+        @if (form.controls.password.invalid && form.controls.password.touched) {
+          <div class="invalid-feedback-custom">Password is required.</div>
+        }
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold" [disabled]="submitting()">
+        @if (submitting()) {
+          <span class="spinner-border spinner-border-sm me-2"></span>
+        }
+        Log In
+      </button>
+    </form>
+
+    <p class="text-center text-muted-custom small mt-4 mb-0">
+      Don't have an account? <a routerLink="/register">Sign up</a>
+    </p>
+  </div>
+</div>

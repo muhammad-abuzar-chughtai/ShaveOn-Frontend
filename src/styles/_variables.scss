@@ -1,0 +1,80 @@
+// =============================================================
+// ShaveOn Design Tokens
+// Centralized theme - change values here to restyle the entire app.
+// Must be imported BEFORE bootstrap so these override Bootstrap's defaults.
+// =============================================================
+
+// ----- Brand palette -----
+$soft-white: #ffffff;
+$surface: #fbfaf9; // faint off-white for section backgrounds, breathing room without a hard aegde
+$ink: #1a1a1a; // primary text - near-black, not flat #000 (softer on the eyes)
+$muted: #6b6b6b; // secondary text, labels, captions
+$purple: #5b2c8f; // primary accent - navbar, buttons, links
+$purple-dark: #451f6e; // hover / active states
+$purple-tint: #f4effa; // very light purple wash for hover backgrounds, subtle section dividers
+$border-hairline: #e7e3ee; // purple-tinted hairline border, not flat gray
+$success: #1f8a55;
+$danger: #c0392b;
+$warning: #b8860b;
+
+// ----- Bootstrap color system overrides -----
+$primary: $purple;
+$secondary: $ink;
+$success: $success;
+$danger: $danger;
+$warning: $warning;
+$light: $surface;
+$dark: $ink;
+$body-color: $ink;
+$body-bg: $soft-white;
+$border-color: $border-hairline;
+
+// ----- Radius: 5px everywhere, precise and structured -----
+$border-radius: 5px;
+$border-radius-sm: 5px;
+$border-radius-lg: 5px;
+$border-radius-xl: 5px;
+$border-radius-pill: 5px; // deliberately NOT pill-shaped - corporate, not consumer-app
+
+// ----- Typography -----
+$font-family-display: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+$font-family-body: "Inter", "Segoe UI", sans-serif;
+$font-family-mono: "IBM Plex Mono", "Courier New", monospace;
+
+$font-family-base: $font-family-body;
+$font-family-sans-serif: $font-family-body;
+
+// Moderate type scale - "neither big nor small" per brief
+$font-size-base: 0.975rem; // ~15.6px
+$h1-font-size: 2.25rem;
+$h2-font-size: 1.75rem;
+$h3-font-size: 1.375rem;
+$h4-font-size: 1.125rem;
+$h5-font-size: 1rem;
+$h6-font-size: 0.875rem;
+$headings-font-family: $font-family-display;
+$headings-font-weight: 600;
+$headings-color: $ink;
+$line-height-base: 1.6;
+
+// ----- Buttons -----
+$btn-font-weight: 600;
+$btn-padding-y: 0.55rem;
+$btn-padding-x: 1.25rem;
+$btn-border-width: 1.5px;
+
+// ----- Cards / containers -----
+$card-border-color: $border-hairline;
+$card-box-shadow: 0 1px 3px rgba(26, 26, 26, 0.06);
+
+// ----- Inputs -----
+$input-border-color: $border-hairline;
+$input-focus-border-color: $purple;
+$input-focus-box-shadow: 0 0 0 0.2rem rgba($purple, 0.15);
+$input-padding-y: 0.55rem;
+$input-padding-x: 0.85rem;
+
+// ----- Navbar -----
+$navbar-padding-y: 1rem;
+
+// ----- Spacers stay Bootstrap default (0-6 scale), used consistently across the app -----

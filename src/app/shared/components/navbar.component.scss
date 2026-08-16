@@ -1,0 +1,66 @@
+@use '../../../styles/variables' as *;
+
+.app-navbar {
+  background: $purple;
+  box-shadow: 0 1px 8px rgba(26, 26, 26, 0.08);
+}
+
+.navbar-brand {
+  font-family: $font-family-display;
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: 0.01em;
+}
+
+.nav-link {
+  font-weight: 500;
+  font-size: 0.92rem;
+  padding-inline: 0.85rem !important;
+
+  &.active {
+    color: #ffffff !important;
+    font-weight: 600;
+  }
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+// Mobile collapsed menu: stack action buttons full-width and add breathing room,
+// since the cramped inline row from desktop doesn't work at narrow widths.
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    padding-top: 0.5rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .navbar-nav {
+    gap: 0.15rem;
+  }
+
+  .nav-link {
+    padding: 0.6rem 0.5rem !important;
+    border-radius: 5px;
+
+    &:hover,
+    &.active {
+      background: rgba(255, 255, 255, 0.08);
+    }
+  }
+
+  .navbar-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    margin-top: 0.5rem;
+
+    .btn {
+      width: 100%;
+    }
+  }
+}
